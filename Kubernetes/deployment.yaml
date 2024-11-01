@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi-deployment
+spec:
+  replicas: 3  # Définit 3 réplicas pour le scaling horizontal
+  selector:
+    matchLabels:
+      app: fastapi-app
+  template:
+    metadata:
+      labels:
+        app: fastapi-app
+    spec:
+      containers:
+      - name: fastapi-container
+        image: samueldiasilua/fastapi-app:latest
+        ports:
+        - containerPort: 8000
+        volumeMounts:
+        - name: fastapi-volume
+          mountPath: /app/KB  # Chemin où le volume est monté dans le conteneur
+      volumes:
+      - name: fastapi-volume
+        persistentVolumeClaim:
+          claimName: fastapi-pvc  # Référence à la PVC
