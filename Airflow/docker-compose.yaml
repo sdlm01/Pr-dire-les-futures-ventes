@@ -1,0 +1,92 @@
+version: '3'
+services:
+  postgres: 
+    image: postgres:13
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=airflow
+      - POSTGRES_PASSWORD=airflow
+      - POSTGRES_DB=airflow
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+    - airflow_network
+
+  airflow-init:
+    image: apache/airflow:2.10.2
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
+    command: ["airflow", "db", "init"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+    - airflow_network
+
+  airflow-webserver:
+    image: apache/airflow:2.10.2
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
+      - AIRFLOW__WEBSERVER__ENABLE_PROXY_FIX=True
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./dags/DAG.py:/opt/airflow/dags/DAG.py         
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
+      - ./Data/nouvelle_bd.csv:/opt/airflow/dags/nouvelle_bd.csv 
+    command: ["airflow", "webserver"]
+    depends_on:
+      postgres:
+        condition: service_started
+      airflow-init:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+    networks:
+    - airflow_network
+
+  airflow-scheduler:
+    image: apache/airflow:2.10.2
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
+    command: ["airflow", "scheduler"]
+    depends_on:
+      postgres:
+        condition: service_started
+      airflow-init:
+        condition: service_completed_successfully
+    networks:
+      - airflow_network
+
+  fastapi:
+    build:
+      context: C:/Users/Maryse/Documents/Proj_Predict_Future_Sales/FastAPI
+      dockerfile: dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_started
+      airflow-webserver:
+        condition: service_healthy
+    networks:
+      - airflow_network
+
+networks:
+  airflow_network:
+    driver: bridge

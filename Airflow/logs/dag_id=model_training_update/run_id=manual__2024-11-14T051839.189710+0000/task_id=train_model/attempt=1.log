@@ -1,0 +1,21 @@
+[2024-11-14T05:18:42.664+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2024-11-14T05:18:42.769+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: model_training_update.train_model manual__2024-11-14T05:18:39.189710+00:00 [queued]>
+[2024-11-14T05:18:42.807+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: model_training_update.train_model manual__2024-11-14T05:18:39.189710+00:00 [queued]>
+[2024-11-14T05:18:42.809+0000] {taskinstance.py:2865} INFO - Starting attempt 1 of 2
+[2024-11-14T05:18:42.866+0000] {taskinstance.py:2888} INFO - Executing <Task(HttpOperator): train_model> on 2024-11-14 05:18:39.189710+00:00
+[2024-11-14T05:18:42.885+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70 DeprecationWarning: This process (pid=333) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2024-11-14T05:18:42.901+0000] {standard_task_runner.py:72} INFO - Started process 336 to run task
+[2024-11-14T05:18:42.885+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'model_training_update', 'train_model', 'manual__2024-11-14T05:18:39.189710+00:00', '--job-id', '6', '--raw', '--subdir', 'DAGS_FOLDER/DAG.py', '--cfg-path', '/tmp/tmpnploew_u']
+[2024-11-14T05:18:42.906+0000] {standard_task_runner.py:105} INFO - Job 6: Subtask train_model
+[2024-11-14T05:18:43.071+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/***/settings.py:209 DeprecationWarning: The sql_alchemy_conn option in [core] has been moved to the sql_alchemy_conn option in [database] - the old setting has been used, but please update your config.
+[2024-11-14T05:18:43.215+0000] {task_command.py:467} INFO - Running <TaskInstance: model_training_update.train_model manual__2024-11-14T05:18:39.189710+00:00 [running]> on host a4a9a6d033a8
+[2024-11-14T05:18:43.680+0000] {taskinstance.py:3131} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='model_training_update' AIRFLOW_CTX_TASK_ID='train_model' AIRFLOW_CTX_EXECUTION_DATE='2024-11-14T05:18:39.189710+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2024-11-14T05:18:39.189710+00:00'
+[2024-11-14T05:18:43.691+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2024-11-14T05:18:43.788+0000] {http.py:173} INFO - Calling HTTP method
+[2024-11-14T05:18:43.812+0000] {base.py:84} INFO - Retrieving connection 'fastapi'
+[2024-11-14T05:18:43.865+0000] {base.py:84} INFO - Retrieving connection 'fastapi'
+[2024-11-14T05:18:46.250+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2024-11-14T05:18:46.251+0000] {taskinstance.py:352} INFO - Marking task as SUCCESS. dag_id=model_training_update, task_id=train_model, run_id=manual__2024-11-14T05:18:39.189710+00:00, execution_date=20241114T051839, start_date=20241114T051842, end_date=20241114T051846
+[2024-11-14T05:18:46.297+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2024-11-14T05:18:46.358+0000] {taskinstance.py:3900} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2024-11-14T05:18:46.362+0000] {local_task_job_runner.py:245} INFO - ::endgroup::
